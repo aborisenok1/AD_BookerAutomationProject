@@ -37,13 +37,37 @@ public class testDeleteBookingById {
         assertThat(allBookings).isNotEmpty();
 
         int deletedBookingId = allBookings.get(0).getBookingid();
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        System.out.println("Удалённый айдишник - " + deletedBookingId);
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
         apiClient.createToken("admin", "password123");
         apiClient.deleteBooking(deletedBookingId);
         assertThat(apiClient.getBookingById(deletedBookingId).getStatusCode()).isEqualTo(404);
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println("Удалённый айдишник - " + deletedBookingId);
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println(apiClient.getBooking().getBody().asString());
     }
+
+
+    @Test
+    public void testDeleteBooking() throws Exception {
+        Response response = apiClient.getBooking();
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        //Десериализум тело ответа в список объектов Booking
+        String responseBody = response.getBody().asString();
+        List<Booking> bookings = objectMapper.readValue(responseBody, new TypeReference<List<Booking>>() {
+        });
+
+        //Проверяем, что тело ответа содержит обьекты Booking
+        assertThat(bookings).isNotEmpty();
+
+        int bookingId = bookings.get(0).getBookingid();
+
+
+        apiClient.createToken("admin", "password123");
+        // Удаление выбранного бронирования
+        Response deleteResponse = apiClient.deleteBooking(bookingId);
+        assertThat(deleteResponse.getStatusCode()).isEqualTo(201);
+    }
+
 }

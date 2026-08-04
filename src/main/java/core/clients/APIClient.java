@@ -11,7 +11,10 @@ import io.restassured.specification.RequestSpecification;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.Properties;
+
+import static org.hamcrest.Matchers.equalTo;
 
 public class APIClient {
 
@@ -122,4 +125,43 @@ public class APIClient {
                 .extract()
                 .response();
     }
+
+    public Response createBooking(String newBooking) {
+        return getRequestSpec()
+                .body(newBooking)
+                .log().all()
+                .when()
+                .post(ApiEndpoints.BOOKING.getPath())
+                .then()
+                .log().all()
+                .extract()
+                .response();
+    }
+
+    public Response putBookingById(int id, String newBooking) {
+        return getRequestSpec()
+                .body(newBooking)
+                .log().all()
+                .when()
+                .put(ApiEndpoints.BOOKING.getPath() + "/" + id) //Используем ENUM Для эндпоинта /ping
+                .then()
+                .log().all()
+                .statusCode(200) //Ожидаемы статус-код 200
+                .extract()
+                .response();
+    }
+
+    public Response patchBookingById(int id, String partialBooking) {
+        return getRequestSpec()
+                .body(partialBooking)
+                .log().all()
+                .when()
+                .patch(ApiEndpoints.BOOKING.getPath() + "/" + id) //Используем ENUM Для эндпоинта /ping
+                .then()
+                .log().all()
+                .statusCode(200) //Ожидаемы статус-код 200
+                .extract()
+                .response();
+    }
+
 }

@@ -34,7 +34,8 @@ public class testGetBookingById {
         assertThat(allBookingsResponse.getStatusCode()).isEqualTo(200);
 
         String allBookingsBody = allBookingsResponse.getBody().asString();
-        List<Booking> allBookings = objectMapper.readValue(allBookingsBody, new TypeReference<List<Booking>>() {});
+        List<Booking> allBookings = objectMapper.readValue(allBookingsBody, new TypeReference<List<Booking>>() {
+        });
         assertThat(allBookings).isNotEmpty();
 
         // Берем ID первого бронирования для теста
@@ -48,10 +49,15 @@ public class testGetBookingById {
 
         // Получаем тело ответа
         String responseBody = response.getBody().asString();
+        System.out.println();
+        System.out.println("- Response Body - ");
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println(responseBody);
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
         // Десериализуем ответ в объект Booking (без поля bookingid, так как его нет в ответе)
-        BookingDetails bookingDetails = objectMapper.readValue(responseBody, new TypeReference<BookingDetails>() {});
+        BookingDetails bookingDetails = objectMapper.readValue(responseBody, new TypeReference<BookingDetails>() {
+        });
 
         // Проверяем, что все обязательные поля присутствуют и имеют корректные значения
         assertThat(bookingDetails.getFirstname()).isNotBlank();
