@@ -32,9 +32,11 @@ public class GetBookingTest {
         AssertionsForClassTypes.assertThat(response.getStatusCode()).isEqualTo(200);
 
         String responseBody = response.getBody().asString();
+        //System.out.println(responseBody);
         List<Booking> bookings = objectMapper.readValue(responseBody, new TypeReference<List<Booking>>() {});
 
         assertThat(bookings).isNotEmpty();
+
 
         for (Booking booking : bookings) {
             assertThat(booking.getBookingid()).isGreaterThan(0);
